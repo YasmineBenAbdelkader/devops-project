@@ -1,0 +1,50 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Build backend
+      - name: Install backend dependencies
+        working-directory: devops-project/todo-backend
+        run: npm install
+
+      - name: Lint or test backend (optional)
+        working-directory: devops-project/todo-backend
+        run: echo "no backend test yet" # Remplacer par "npm test" si tu as des tests
+
+      # Build frontend
+      - name: Install frontend dependencies
+        working-directory: devops-project/todo-frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: devops-project/todo-frontend
+        run: npm run build
+
+      # Docker build check
+      - name: Docker Build Backend
+        run: docker build -t backend devops-project/todo-backend
+
+      - name: Docker Build Frontend
+        run: docker build -t frontend devops-project/todo-frontend
