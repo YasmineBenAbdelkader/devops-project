@@ -151,7 +151,7 @@ function App() {
           
           {/* Menu desktop */}
           <nav className="desktop-menu">
-            <a href="#" className="menu-item">Accueil</a>
+            
        
           </nav>
         </div>
@@ -160,7 +160,7 @@ function App() {
       {/* Menu mobile */}
       {mobileSidebarOpen && (
         <div className="mobile-menu">
-          <a href="#" className="mobile-menu-item">Accueil</a>
+          
          
         </div>
       )}

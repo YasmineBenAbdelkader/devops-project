@@ -1,0 +1,36 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Backend
+        run: docker build -t backend ./todo-backend
+
+      - name: Build Docker Frontend
+        run: docker build -t frontend ./todo-frontend
+
+      - name: Stop existing containers (if any)
+        run: |
+          docker stop backend || true
+          docker rm backend || true
+          docker stop frontend || true
+          docker rm frontend || true
+
+      - name: Run backend container
+        run: docker run -d -p 5000:5000 --name backend backend
+
+      - name: Run frontend container
+        run: docker run -d -p 3000:3000 --name frontend frontend
