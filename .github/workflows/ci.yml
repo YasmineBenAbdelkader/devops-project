@@ -7,13 +7,17 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     services:
       mongo:
         image: mongo
         ports:
           - 27017:27017
+
+    env:
+      MONGO_URL: mongodb://localhost:27017/tododb
 
     steps:
       - name: Checkout code
@@ -24,25 +28,38 @@ jobs:
         with:
           node-version: '18'
 
+      ###########################
       # Backend
+      ###########################
+
       - name: Install backend dependencies
         working-directory: ./todo-backend
         run: npm install
 
-      - name: Lint or test backend (optional)
+      - name: Run backend tests
         working-directory: ./todo-backend
-        run: echo "no backend test yet"  # remplacer par "npm test" si tu en as
+        run: npm test
 
+      ###########################
       # Frontend
+      ###########################
+
       - name: Install frontend dependencies
         working-directory: ./todo-frontend
         run: npm install
+
+      - name: Run frontend tests
+        working-directory: ./todo-frontend
+        run: npm test
 
       - name: Build frontend
         working-directory: ./todo-frontend
         run: npm run build
 
-      # Docker builds
+      ###########################
+      # Docker Build (optional)
+      ###########################
+
       - name: Docker Build Backend
         run: docker build -t backend ./todo-backend
 
