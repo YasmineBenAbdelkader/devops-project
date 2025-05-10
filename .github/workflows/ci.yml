@@ -24,27 +24,27 @@ jobs:
         with:
           node-version: '18'
 
-      # Build backend
+      # Backend
       - name: Install backend dependencies
-        working-directory: devops-project/todo-backend
+        working-directory: ./todo-backend
         run: npm install
 
       - name: Lint or test backend (optional)
-        working-directory: devops-project/todo-backend
-        run: echo "no backend test yet" # Remplacer par "npm test" si tu as des tests
+        working-directory: ./todo-backend
+        run: echo "no backend test yet"  # remplacer par "npm test" si tu en as
 
-      # Build frontend
+      # Frontend
       - name: Install frontend dependencies
-        working-directory: devops-project/todo-frontend
+        working-directory: ./todo-frontend
         run: npm install
 
       - name: Build frontend
-        working-directory: devops-project/todo-frontend
+        working-directory: ./todo-frontend
         run: npm run build
 
-      # Docker build check
+      # Docker builds
       - name: Docker Build Backend
-        run: docker build -t backend devops-project/todo-backend
+        run: docker build -t backend ./todo-backend
 
       - name: Docker Build Frontend
-        run: docker build -t frontend devops-project/todo-frontend
+        run: docker build -t frontend ./todo-frontend
